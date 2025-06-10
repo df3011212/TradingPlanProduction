@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>交易計畫表</title>
+  <style>
+    body {
+      font-family: "微軟正黑體", sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #222;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"],
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #bbb;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .inline-group {
+      display: flex;
+      gap: 10px;
+    }
+    .inline-group > div {
+      flex: 1;
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #005a9e;
+    }
+    .output {
+      margin-top: 30px;
+      white-space: pre-wrap;
+      background: #e9f0ff;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: monospace;
+      color: #003366;
+      border: 1px solid #99bbff;
+    }
+  </style>
+</head>
+<body>
+  <h1>交易計畫表</h1>
+  <form id="tradePlanForm">
+    <label for="entryStrategy">1・進場攻略</label>
+    <textarea id="entryStrategy" name="entryStrategy" placeholder="描述進場依據或策略..."></textarea>
+
+    <label for="entryTime">2・進場時間</label>
+    <input type="datetime-local" id="entryTime" name="entryTime" />
+
+    <label for="entryPrice">3・進場價格</label>
+    <input type="number" id="entryPrice" name="entryPrice" step="any" placeholder="輸入價格" />
+
+    <div class="inline-group">
+      <div>
+        <label for="stopLossPercent">4・止損％</label>
+        <input type="number" id="stopLossPercent" name="stopLossPercent" step="any" placeholder="%" />
+      </div>
+      <div>
+        <label for="stopLossPrice">止損價格</label>
+        <input type="number" id="stopLossPrice" name="stopLossPrice" step="any" placeholder="價格" />
+      </div>
+    </div>
+
+    <div class="inline-group">
+      <div>
+        <label for="takeProfitPercent">5・止盈％</label>
+        <input type="number" id="takeProfitPercent" name="takeProfitPercent" step="any" placeholder="%" />
+      </div>
+      <div>
+        <label for="takeProfitPrice">止盈價格</label>
+        <input type="number" id="takeProfitPrice" name="takeProfitPrice" step="any" placeholder="價格" />
+      </div>
+    </div>
+
+    <label for="riskRewardRatio">6・盈虧比</label>
+    <input type="text" id="riskRewardRatio" name="riskRewardRatio" placeholder="例：2.5:1" />
+
+    <fieldset style="margin-top:20px; padding:10px; border: 1px solid #ccc; border-radius:6px;">
+      <legend><strong>7・資金管理</strong></legend>
+      <label for="capital">本金</label>
+      <input type="number" id="capital" name="capital" step="any" placeholder="資金總額" />
+
+      <label for="margin">保證金</label>
+      <input type="number" id="margin" name="margin" step="any" placeholder="保證金金額" />
+
+      <label for="maxLossAmount">每次最大虧損金額</label>
+      <input type="number" id="maxLossAmount" name="maxLossAmount" step="any" placeholder="最大虧損額" />
+
+      <label for="leverage">槓桿倍數</label>
+      <input type="number" id="leverage" name="leverage" step="any" placeholder="槓桿倍數" />
+    </fieldset>
+
+    <label for="layoutDiagram">8・佈局圖（可描述或貼圖連結）</label>
+    <textarea id="layoutDiagram" name="layoutDiagram" placeholder="描述佈局，或貼上圖片連結"></textarea>
+
+    <label for="exitTime">9・出場時間</label>
+    <input type="datetime-local" id="exitTime" name="exitTime" />
+
+    <label for="finalPL">10・最終盈虧</label>
+    <input type="text" id="finalPL" name="finalPL" placeholder="例：+3,000元 / +3%" />
+
+    <button type="submit">產生交易計畫摘要</button>
+  </form>
+
+  <pre class="output" id="outputArea" style="display:none;"></pre>
+
+  <script>
+    const form = document.getElementById('tradePlanForm');
+    const output = document.getElementById('outputArea');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const data = new FormData(form);
+
+      // 簡單組成文字摘要
+      const summary = `
+交易計畫表
+----------------------------
+1・進場攻略：
+${data.get('entryStrategy')}
+
+2・進場時間：${data.get('entryTime') || '未填寫'}
+3・進場價格：${data.get('entryPrice') || '未填寫'}
+
+4・止損％：${data.get('stopLossPercent') || '未填寫'}  止損價格：${data.get('stopLossPrice') || '未填寫'}
+5・止盈％：${data.get('takeProfitPercent') || '未填寫'}  止盈價格：${data.get('takeProfitPrice') || '未填寫'}
+
+6・盈虧比：${data.get('riskRewardRatio') || '未填寫'}
+
+7・資金管理：
+   本金：${data.get('capital') || '未填寫'}
+   保證金：${data.get('margin') || '未填寫'}
+   每次最大虧損金額：${data.get('maxLossAmount') || '未填寫'}
+   槓桿倍數：${data.get('leverage') || '未填寫'}
+
+8・佈局圖：
+${data.get('layoutDiagram') || '未填寫'}
+
+9・出場時間：${data.get('exitTime') || '未填寫'}
+
+10・最終盈虧：${data.get('finalPL') || '未填寫'}
+----------------------------
+      `.trim();
+
+      output.textContent = summary;
+      output.style.display = 'block';
+      output.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
