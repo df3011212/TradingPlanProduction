@@ -189,6 +189,22 @@ ${data.get('layoutDiagram') || '未填寫'}
       output.style.display = 'block';
       output.scrollIntoView({ behavior: 'smooth' });
     });
+
+    function copyOutput() {
+  const output = document.querySelector('.output').textContent;
+  if (!output.trim()) {
+    alert('輸出區沒有內容，無法複製！');
+    return;
+  }
+  navigator.clipboard.writeText(output).then(() => {
+    alert('已複製到剪貼簿！');
+  }).catch(() => {
+    alert('複製失敗，請手動複製。');
+  });
+}
+
   </script>
+  <button type="button" onclick="copyOutput()">複製輸出</button>
+
 </body>
 </html>
