@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <footer style="text-align:center; padding: 16px; font-size: 14px; color: gray;">
-    洪士弘 版權所有 ©2025 大仁老師投資理財學堂專屬工具
-  </footer>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>交易計畫表</title>
@@ -81,6 +78,22 @@
         flex-direction: column;
       }
     }
+    .other-btn {
+  background-color: #00a4c3; /* 藍色背景 */
+  color: white;              /* 白色文字 */
+  border: none;
+  border-radius: 999px;      /* 圓角膠囊形狀 */
+  padding: 10px 24px;
+  font-size: 18px;
+  font-family: "微軟正黑體", sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.other-btn:hover {
+  background-color: #0089aa;
+}
   </style>
 </head>
 <body>
@@ -208,27 +221,18 @@ ${data.get('layoutDiagram') || '未填寫'}
 
   </script>
   <button type="button" onclick="copyOutput()">複製輸出</button>
+<!-- ⭐ 我的最愛（功能選單） -->
+<div class="container" style="margin-top: 24px;">
+  <div style="background: #f1f1f1; padding: 16px; border-radius: 12px;">
+    <h3 style="margin-bottom: 16px;">⭐ 我的最愛</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+      <a href="https://df3011212.github.io/okx-calculator/" target="_blank" class="feature-link-button" style="flex:1; min-width: 160px; text-align:center; background:#00a4c3; color:white; padding:12px 0; border-radius:8px; text-decoration:none;">📘 開單速算表v1.2</a>
+      <a href="https://df3011212.github.io/RSI/" target="_blank" class="feature-link-button" style="flex:1; min-width: 160px; text-align:center; background:#00a4c3; color:white; padding:12px 0; border-radius:8px; text-decoration:none;">📊 RSI 排行榜</a>
+      <a href="https://sosovalue.com/tc" target="_blank" class="feature-link-button" style="flex:1; min-width: 160px; text-align:center; background:#00a4c3; color:white; padding:12px 0; border-radius:8px; text-decoration:none;">📈 SoSoValue</a>
+    </div>
+  </div>
+</div>
 
 </body>
-    <footer style="text-align:center; padding: 16px; font-size: 14px; color: gray;">
-  洪士弘 版權所有 ©2025 大仁老師投資理財學堂專屬工具
-</footer>
 
-<!-- ✅ 加上計數器 -->
-<div style="text-align: center; margin-top: 8px;">
-  <table border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
-    <tr>
-      <td>
-        <a href="https://ctr.stylemap.co.jp/">
-          <img src="https://www.f-counter.net/ani1/65/1749610404/" alt="免費アクセスカウンター" style="border:0; vertical-align:bottom">
-        </a>
-      </td>
-      <td>
-        <a href="https://ctr.stylemap.co.jp/">
-          <img src="https://www.f-counter.net/ani2/65/1749610404/" alt="免費アクセスカウンター" style="border:0; vertical-align:bottom">
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
 </html>
